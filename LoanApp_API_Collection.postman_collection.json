@@ -1,0 +1,795 @@
+{
+	"info": {
+		"_postman_id": "loan-app-api-collection",
+		"name": "LoanApp Backend API Collection",
+		"description": "Complete API collection for USA-standard Loan Application with AI Chat System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12345678"
+	},
+	"item": [
+		{
+			"name": "AUTH - User Registration & Login",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"SecurePass123!\",\n  \"phoneNumber\": \"+1234567890\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Verify OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{registerToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"otp\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/verify-otp",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "verify-otp"]
+						}
+					}
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"SecurePass123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Resend OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/resend-otp",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "resend-otp"]
+						}
+					}
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/forgot-password",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "forgot-password"]
+						}
+					}
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"newPassword\": \"NewSecurePass456!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/reset-password/{{resetToken}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "reset-password", "{{resetToken}}"]
+						}
+					}
+				},
+				{
+					"name": "Logout User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/logout",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "logout"]
+						}
+					}
+				},
+				{
+					"name": "Get User Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/user/{{userId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "user", "{{userId}}"]
+						}
+					}
+				},
+				{
+					"name": "Update KYC",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"documentType\": \"driverLicense\",\n  \"documentImage\": \"https://cloudinary.com/...\",\n  \"occupation\": \"Software Engineer\",\n  \"address\": \"123 Main St, New York, NY 10001\",\n  \"dateOfBirth\": \"1990-01-15\",\n  \"placeOfWork\": \"Tech Company Inc\",\n  \"phoneNumber\": \"+1234567890\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/users/{{userId}}/update-kyc",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "users", "{{userId}}", "update-kyc"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "LOANS - Loan Management",
+			"item": [
+				{
+					"name": "Apply for Loan",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"loanType\": \"Personal\",\n  \"amount\": 15000,\n  \"durationMonths\": 24\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/loans/apply",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "loans", "apply"]
+						}
+					}
+				},
+				{
+					"name": "Get My Loans",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{userToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/loans/my-loans",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "loans", "my-loans"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "CHAT - Registered User Chat",
+			"item": [
+				{
+					"name": "Initialize Chat",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john@example.com\",\n  \"name\": \"John Doe\",\n  \"role\": \"user\",\n  \"loanData\": {\n    \"loanId\": \"{{loanId}}\",\n    \"amount\": 15000,\n    \"term\": 24\n  }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/chat/init",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "chat", "init"]
+						}
+					}
+				},
+				{
+					"name": "Send Chat Message",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"applicationId\": \"{{loanId}}\",\n  \"email\": \"john@example.com\",\n  \"senderType\": \"user\",\n  \"text\": \"What are the interest rates for personal loans?\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/chat/message",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "chat", "message"]
+						}
+					}
+				},
+				{
+					"name": "Get Chat Messages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/chat/messages/{{loanId}}?page=1&limit=30",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "chat", "messages", "{{loanId}}"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "30"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get All Applications",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/chat/applications",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "chat", "applications"]
+						}
+					}
+				},
+				{
+					"name": "Update Application Status",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"approved\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/chat/status/{{loanId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "chat", "status", "{{loanId}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "GUEST CHAT - AI Support (No Auth Required)",
+			"item": [
+				{
+					"name": "Initialize Guest Chat",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"Jane Smith\",\n  \"email\": \"jane.smith@example.com\",\n  \"loanAmount\": 20000\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/chat/guest/init",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "chat", "guest", "init"]
+						}
+					}
+				},
+				{
+					"name": "Send Guest Message (AI Response)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sessionToken\": \"{{guestSessionToken}}\",\n  \"text\": \"What are the eligibility requirements for a personal loan?\",\n  \"messageType\": \"text\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/chat/guest/message",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "chat", "guest", "message"]
+						}
+					}
+				},
+				{
+					"name": "Get Guest Chat Messages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/chat/guest/messages/{{guestSessionToken}}?page=1&limit=30",
+							"host": ["{{baseUrl}}"],
+							"path": [
+								"api",
+								"chat",
+								"guest",
+								"messages",
+								"{{guestSessionToken}}"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "30"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Guest Session Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/chat/guest/session/{{guestSessionToken}}",
+							"host": ["{{baseUrl}}"],
+							"path": [
+								"api",
+								"chat",
+								"guest",
+								"session",
+								"{{guestSessionToken}}"
+							]
+						}
+					}
+				},
+				{
+					"name": "Escalate Guest to Human Agent",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sessionToken\": \"{{guestSessionToken}}\",\n  \"reason\": \"Need to speak with a human agent\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/chat/guest/escalate",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "chat", "guest", "escalate"]
+						}
+					}
+				},
+				{
+					"name": "Get Escalated Chats (Admin Only)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/chat/guest/escalated",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "chat", "guest", "escalated"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "ADMIN - Administration Panel",
+			"item": [
+				{
+					"name": "Register Admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Admin User\",\n  \"email\": \"admin@loanapp.com\",\n  \"phoneNumber\": \"+1234567890\",\n  \"password\": \"AdminSecure123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "register"]
+						}
+					}
+				},
+				{
+					"name": "Verify Admin OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminRegisterToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"otp\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/verify-otp",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "verify-otp"]
+						}
+					}
+				},
+				{
+					"name": "Login Admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@loanapp.com\",\n  \"password\": \"AdminSecure123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "login"]
+						}
+					}
+				},
+				{
+					"name": "Resend Admin OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@loanapp.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/resend-otp",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "resend-otp"]
+						}
+					}
+				},
+				{
+					"name": "Get Admin Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/getAdmin",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "getAdmin"]
+						}
+					}
+				},
+				{
+					"name": "Forgot Password (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@loanapp.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/forgot-password",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "forgot-password"]
+						}
+					}
+				},
+				{
+					"name": "Reset Password (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"newPassword\": \"NewAdminPass456!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/reset-password/{{adminResetToken}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "reset-password", "{{adminResetToken}}"]
+						}
+					}
+				},
+				{
+					"name": "Logout Admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/logout",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "logout"]
+						}
+					}
+				},
+				{
+					"name": "Get Dashboard Stats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/dashboard/stats",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "dashboard", "stats"]
+						}
+					}
+				},
+				{
+					"name": "Update Loan Status",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"approved\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/loans/{{loanId}}/status",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "loans", "{{loanId}}", "status"]
+						}
+					}
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/users/{{userId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "users", "{{userId}}"]
+						}
+					}
+				},
+				{
+					"name": "Toggle Loan AI Assistant",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{adminToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/loans/{{loanId}}/toggle-ai",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "loans", "{{loanId}}", "toggle-ai"]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "userToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "adminToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "registerToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "adminRegisterToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "resetToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "adminResetToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "loanId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "guestSessionToken",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

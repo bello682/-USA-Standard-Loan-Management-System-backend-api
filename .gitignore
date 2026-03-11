@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+jspm_packages/
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs
+*.log
+
+# Environment variables (VITAL: Keeps your API keys and DB URI safe)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS Metadata
+.DS_Store
+Thumbs.db
+
+# Build/Dist folders
+dist/
+build/
+out/
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Database files (if using SQLite or local DB files)
+*.sqlite
+*.db

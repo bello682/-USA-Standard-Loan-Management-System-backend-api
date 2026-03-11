@@ -1,0 +1,277 @@
+{
+	"info": {
+		"name": "LOAD COLLECTION API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Authentication & Verification",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullName\": \"John Doe\",\n    \"email\": \"johndoe@example.com\",\n    \"password\": \"Password123!\"\n}",
+							"options": { "raw": { "language": "json" } }
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Verify OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{temp_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"otp\": \"123456\"\n}",
+							"options": { "raw": { "language": "json" } }
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/verify-otp",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "verify-otp"]
+						}
+					}
+				},
+				{
+					"name": "Resend OTP",
+					"request": {
+						"method": "POST",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"johndoe@example.com\"\n}",
+							"options": { "raw": { "language": "json" } }
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/resend-otp",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "resend-otp"]
+						}
+					}
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"johndoe@example.com\",\n    \"password\": \"Password123!\"\n}",
+							"options": { "raw": { "language": "json" } }
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/logout",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "logout"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Password Management",
+			"item": [
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"johndoe@example.com\"\n}",
+							"options": { "raw": { "language": "json" } }
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/forgot-password",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "forgot-password"]
+						}
+					}
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"newPassword\": \"NewSecurePass123!\"\n}",
+							"options": { "raw": { "language": "json" } }
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/reset-password/:token",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "reset-password", ":token"],
+							"variable": [
+								{ "key": "token", "value": "paste_reset_token_from_email" }
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. User & KYC",
+			"item": [
+				{
+					"name": "Fetch User Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/user/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "user", ":id"],
+							"variable": [{ "key": "id", "value": "paste_user_id" }]
+						}
+					}
+				},
+				{
+					"name": "Update KYC",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{ "key": "documentType", "value": "idCard", "type": "text" },
+								{
+									"key": "occupation",
+									"value": "Software Engineer",
+									"type": "text"
+								},
+								{ "key": "address", "value": "123 Finance St", "type": "text" },
+								{ "key": "dateOfBirth", "value": "1990-01-01", "type": "text" },
+								{ "key": "placeOfWork", "value": "Tech Corp", "type": "text" },
+								{ "key": "bvn", "value": "22233344455", "type": "text" },
+								{
+									"key": "phoneNumber",
+									"value": "+23480000000",
+									"type": "text"
+								},
+								{ "key": "documentImage", "type": "file", "src": [] }
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/users/:userId/update-kyc",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "users", ":userId", "update-kyc"],
+							"variable": [{ "key": "userId", "value": "paste_user_id" }]
+						}
+					}
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/auth/user/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "user", ":id"],
+							"variable": [{ "key": "id", "value": "paste_user_id" }]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Loans",
+			"item": [
+				{
+					"name": "Apply for Loan",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"loanType\": \"Business\",\n    \"amount\": 10000,\n    \"durationMonths\": 24\n}",
+							"options": { "raw": { "language": "json" } }
+						},
+						"url": {
+							"raw": "{{base_url}}/api/loans/apply",
+							"host": ["{{base_url}}"],
+							"path": ["api", "loans", "apply"]
+						}
+					}
+				},
+				{
+					"name": "Get My Loans",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/loans/my-loans",
+							"host": ["{{base_url}}"],
+							"path": ["api", "loans", "my-loans"]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{ "key": "base_url", "value": "http://localhost:5000" },
+		{ "key": "temp_token", "value": "" },
+		{ "key": "access_token", "value": "" }
+	]
+}
