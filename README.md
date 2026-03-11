@@ -2,9 +2,9 @@
 
 A production-ready loan application backend following USA lending standards with AI-powered support chat system for both registered and guest users.
 
-Features
+**Features**
 
-✅ USA Compliant Loan Management
+# USA Compliant Loan Management
 
 Personal, Auto, Student, and Business loans
 
@@ -14,7 +14,7 @@ Interest rate calculation based on credit scores
 
 ACH payment processing
 
-✅ Advanced Chat System
+# Advanced Chat System
 
 Real-time messaging with Socket.IO
 
@@ -26,7 +26,7 @@ Automatic escalation to human agents
 
 Conversation history and read receipts
 
-✅ User Management
+# User Management
 
 Email verification with OTP
 
@@ -38,7 +38,7 @@ Facial recognition ready
 
 Security audit trails
 
-✅ Security & Compliance
+# Security & Compliance
 
 JWT authentication with refresh tokens
 
@@ -50,7 +50,7 @@ CORS protection
 
 Cloudinary file uploads
 
-✅ Admin Dashboard
+# Admin Dashboard
 
 Application management
 
@@ -60,7 +60,7 @@ Status updates and notifications
 
 Escalation management
 
-✅ Tech Stack
+# Tech Stack
 
 Backend: Node.js, Express.js
 
@@ -80,7 +80,7 @@ Validation: Joi
 
 Utilities: Bcrypt, Moment.js, UUID
 
-✅ Prerequisites
+# Prerequisites
 
 Node.js 18.0 or higher
 
@@ -109,7 +109,8 @@ Installation
    cp ENV_TEMPLATE.md .env
    nano .env
 
-✅ Required Environment Variables:
+# Required Environment Variables:
+
 NODE_ENV=development
 PORT=5000
 MONGODB_URL=mongodb://localhost:27017/loanapp
@@ -126,15 +127,15 @@ FRONTEND_URL=http://localhost:3000
 
 # MongoDB should be running
 
-mongod
-
 # For MongoDB Atlas, update MONGODB_URL in .env
 
 5. Start Development Server
    npm run dev
-   Server will start on http://localhost:5000
+   Server will start on:
+   http://localhost:5000
+   https://standard-loan-management-system-backend.onrender.com
 
-✅ Project Structure
+# **Project Structure**
 
 my-loan-backend-node-js/
 ├── config/
@@ -173,9 +174,9 @@ my-loan-backend-node-js/
 ├── package.json # Dependencies
 └── API_DOCUMENTATION.md # Complete API reference
 
-API Endpoints
+**API Endpoints**
 
-✅ Authentication
+# Authentication
 
 POST /api/auth/register - Register new user
 
@@ -185,7 +186,7 @@ POST /api/auth/login - Login user
 
 GET /api/auth/profile - Get user profile
 
-✅ Loans
+# Loans
 
 POST /api/loans/apply - Create loan application
 
@@ -193,7 +194,7 @@ GET /api/loans/my-loans - Get user's loans
 
 GET /api/loans/:loanId - Get loan details
 
-✅ Registered User Chat
+# Registered User Chat
 
 POST /api/chat/init - Initialize chat
 
@@ -201,7 +202,7 @@ POST /api/chat/message - Send message
 
 GET /api/chat/messages/:applicationId - Fetch chat history
 
-✅ Guest Chat (AI Support)
+# Guest Chat (AI Support)
 
 POST /api/chat/guest/init - Start guest session
 
@@ -211,7 +212,7 @@ GET /api/chat/guest/messages/:sessionToken - Get history
 
 POST /api/chat/guest/escalate - Escalate to human
 
-✅ Admin
+# Admin
 
 GET /api/chat/applications - Get all applications
 
@@ -220,21 +221,22 @@ PATCH /api/chat/status/:applicationId - Update status
 GET /api/chat/guest/escalated - Get escalated chats
 
 Socket.IO Events
-✅ Client → Server
+
+# Client → Server
 
 socket.emit("join-room", { applicationId });
 socket.emit("typing", { applicationId, senderType });
 socket.emit("stop-typing", { applicationId });
 socket.emit("mark-read", { applicationId, userType });
 
-✅ Server → Client
+# Server → Client
 
 socket.on("newMessage", (message) => {});
 socket.on("typing", ({ senderType }) => {});
 socket.on("stop-typing", () => {});
 socket.on("read-update", ({ userType }) => {});
 
-✅ AI Chat System
+# AI Chat System
 
 Uses OpenAI GPT-3.5-turbo
 
@@ -244,7 +246,8 @@ Auto escalation to human agents
 
 Smart fallback responses
 
-✅ Email System
+# Email System
+
 Email Types
 
 OTP Verification
@@ -257,15 +260,27 @@ Payment Reminders
 
 Support Ticket Responses
 
-✅ Providers
+# Providers
 
-Production: SendGrid (recommended)
+**Important Note for Testers/Recruiters**
+Email Delivery in Production
+This project uses Nodemailer with Gmail SMTP to send OTP verification emails.
 
-Development: Nodemailer (Gmail/SMTP)
+However:
 
-⚠️ Nodemailer + Gmail Issue:
+Platforms like Render block direct SMTP connections for security reasons
+Because of this restriction, email sending works locally but may fail in hosted environments.
+If testing this project:
 
-If using Gmail with Nodemailer in development:
+Option 1 (Recommended) Use a transactional email service such as:
+
+SendGrid
+Mailgun
+Resend
+Amazon SES
+Option 2 Run the project locally where SMTP is not blocked.
+
+Local testing will allow OTP verification emails to be delivered correctly.
 
 Enable 2FA for your Gmail account
 
@@ -277,3 +292,8 @@ EMAIL_USER=your-email@gmail.com
 EMAIL_PASS=your-app-password
 
 REFERENCE TO POSTMAN TESTING FILE: LoanApp_API_Collection.postman_collection.json
+
+**Author**
+Bello Adetayo
+
+Backend Engineer focused on building secure fintech systems.
