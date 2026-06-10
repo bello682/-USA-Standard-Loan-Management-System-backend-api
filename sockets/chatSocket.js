@@ -64,12 +64,18 @@ module.exports = (io) => {
       }
     });
 
+    socket.on("join_chat", ({ userId, applicationId }) => {
+      if (applicationId) socket.join(applicationId.toString());
+      if (userId) socket.join(userId.toString());
+    });
+
     /* ===============================
 		   GUEST CHAT WITH AI
 		================================ */
 
     // Guest joins room
     socket.on("guest-join-room", ({ guestId }) => {
+      socket.join(guestId.toString());
       socket.join(`guest-${guestId}`);
       // console.log(`Guest joined room: ${guestId}`);
 
@@ -77,6 +83,26 @@ module.exports = (io) => {
         message: "Guest session established",
         timestamp: new Date(),
       });
+    });
+
+    socket.on("join_guest_chat", async ({ sessionToken }) => {
+      try {
+        const guestUser = await GuestUser.findOne({
+          sessionToken,
+          isActive: true,
+        });
+
+        if (!guestUser) {
+          socket.emit("error", { message: "Invalid guest session" });
+          return;
+        }
+
+        socket.join(guestUser._id.toString());
+        socket.join(`guest-${guestUser._id.toString()}`);
+      } catch (err) {
+        console.error("Guest Join Error:", err.message);
+        socket.emit("error", { message: "Failed to join guest chat" });
+      }
     });
 
     // Guest sends message (will be handled in controller)

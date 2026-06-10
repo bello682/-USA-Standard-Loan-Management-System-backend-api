@@ -92,7 +92,7 @@ const InitGuestChat = async (req, res, next) => {
 
     // Fetch conversation history
     const messages = await ChatMessage.find({
-      applicationId: guestUser._id,
+      $or: [{ userId: guestUser._id }, { applicationId: guestUser._id }],
     }).sort({ createdAt: 1 });
 
     res.status(200).json({
@@ -145,6 +145,7 @@ const PostGuestMessage = async (req, res, next) => {
     // 1️⃣ SAVE USER MESSAGE
     const userMessage = await ChatMessage.create({
       userId: guestUser._id,
+      applicationId: guestUser._id,
       senderType: "user",
       senderName: guestUser.fullName,
       senderEmail: guestUser.email,
@@ -180,6 +181,7 @@ const PostGuestMessage = async (req, res, next) => {
       // 3️⃣ SAVE AI RESPONSE
       botMessage = await ChatMessage.create({
         userId: guestUser._id,
+        applicationId: guestUser._id,
         senderType: "ai-bot",
         senderName: "LoanBot",
         text: aiResponse.message,
@@ -203,6 +205,7 @@ const PostGuestMessage = async (req, res, next) => {
 
           const escalationMsg = await ChatMessage.create({
             userId: guestUser._id,
+            applicationId: guestUser._id,
             senderType: "system",
             text: "Connecting you to a human support specialist...",
             messageType: "text",
@@ -264,7 +267,7 @@ const FetchGuestMessages = async (req, res, next) => {
     }
 
     const messages = await ChatMessage.find({
-      applicationId: guestUser._id,
+      $or: [{ userId: guestUser._id }, { applicationId: guestUser._id }],
     })
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
@@ -313,6 +316,7 @@ const EscalateGuestToAdmin = async (req, res, next) => {
 
     // Create system message
     const escalationMsg = await ChatMessage.create({
+      userId: guestUser._id,
       applicationId: guestUser._id,
       senderType: "system",
       text: `You are now chatting with ${admin.fullName} from our support team.`,

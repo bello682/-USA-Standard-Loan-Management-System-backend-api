@@ -2,6 +2,7 @@ const HttpError = require("../models/errorModel");
 const Loan = require("../models/loanModel");
 const ChatMessage = require("../models/ChatMessage");
 const User = require("../models/userModel");
+const GuestUser = require("../models/guestUserModel");
 const Admin = require("../models/adminModel");
 const {
   chatValidationSchema_Message,
@@ -338,9 +339,10 @@ const FetchAllApplications = async (req, res, next) => {
     const chatList = await Promise.all(
       activeChats.map(async (chat) => {
         const user = await User.findById(chat._id)
-          .select("fullName email")
+          .select("fullName email aiAssistant")
           .lean();
         let loan = null;
+        let guestUser = null;
 
         if (chat.applicationId) {
           loan = await Loan.findById(chat.applicationId).lean();
@@ -351,19 +353,44 @@ const FetchAllApplications = async (req, res, next) => {
             .lean();
         }
 
+        if (!user) {
+          guestUser = await GuestUser.findById(chat._id)
+            .select("fullName email aiAssistant loanAmount lastActivityAt")
+            .lean();
+        }
+
+        const actor = user || guestUser;
+        const isGuest = !!guestUser;
+
         // Merge data to match the frontend expectations
+        // return {
+        //   _id: loan?._id || chat._id, // Use loan ID if exists, otherwise User ID
+        //   userId: user,
+        //   userName: user?.fullName || "Guest User",
+        //   userEmail: user?.email,
+        //   lastMessageText: chat.lastMessageText,
+        //   updatedAt: chat.lastMessageDate,
+        //   amount: loan?.amount || 0,
+        //   loanType: loan?.loanType || "Inquiry (No Loan)",
+        //   status: loan?.status || "chatting",
+        //   aiAssistant: loan?.aiAssistant ||
+        //     user?.aiAssistant || { isActive: true }, // check the User/Guest table.
+        //   loanAccountNumber: loan?.loanAccountNumber || "No Active Loan",
+        // };
         return {
-          _id: loan?._id || chat._id, // Use loan ID if exists, otherwise User ID
-          userId: user,
-          userName: user?.fullName || "Guest User",
-          userEmail: user?.email,
+          _id: loan?._id || actor?._id || chat._id,
+          chatId: loan?._id || actor?._id || chat._id,
+          userId: actor?._id || chat._id,
+          userName: actor?.fullName || "Guest User",
+          userEmail: actor?.email,
           lastMessageText: chat.lastMessageText,
           updatedAt: chat.lastMessageDate,
-          amount: loan?.amount || 0,
-          loanType: loan?.loanType || "Inquiry (No Loan)",
-          status: loan?.status || "chatting",
+          amount: loan?.amount || guestUser?.loanAmount || 0,
+          loanType: loan?.loanType || (isGuest ? "Guest Inquiry" : "Inquiry"),
+          status: loan?.status || (isGuest ? "guest_inquiry" : "chatting"),
+          isGuest,
           aiAssistant: loan?.aiAssistant ||
-            user?.aiAssistant || { isActive: true }, // check the User/Guest table.
+            actor?.aiAssistant || { isActive: true },
           loanAccountNumber: loan?.loanAccountNumber || "No Active Loan",
         };
       }),
