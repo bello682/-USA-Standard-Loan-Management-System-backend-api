@@ -13,6 +13,7 @@ const loanRoute = require("./routes/loanRoutes");
 const chatRoute = require("./routes/chatRoute");
 const guestChatRoute = require("./routes/guestChatRoute");
 const adminRoute = require("./routes/adminRoute");
+const notificationRoute = require("./routes/notificationRoutes");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
 const app = express();
@@ -77,6 +78,12 @@ app.use(
 // 	}
 // });
 
+// CHANGE THIS: Instead of attaching directly to req, use app.set
+app.use((req, res, next) => {
+  req.io = app.get("io"); // Pulls the io instance from the app settings
+  next();
+});
+
 /* ===============================
    ROUTES
 ================================ */
@@ -85,7 +92,7 @@ app.use("/api/loans", loanRoute);
 app.use("/api/chat", chatRoute);
 app.use("/api/chat", guestChatRoute);
 app.use("/api/admin", adminRoute);
-
+app.use("/api/notifications", notificationRoute);
 /* ===============================
    ERRORS
 ================================ */
@@ -115,6 +122,12 @@ const startServer = async () => {
         credentials: true,
       },
     });
+
+    // SET THE IO INSTANCE HERE
+    app.set("io", io);
+
+    // ... initialize sockets ...
+    require("./sockets/chatSocket")(io);
 
     // ✅ SOCKET INIT (CORRECT PLACE)
     // require("./sockets/chatSocket")(io);
