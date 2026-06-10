@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
    CORS CONFIG
 ================================ */
 const allowedOrigins = [
-  // "https://my-loan-website-nest-js.vercel.app",
+  "https://loan-web-app-next-js-frontend.vercel.app/",
   "http://localhost:3003",
   "http://localhost:3000",
 ];
